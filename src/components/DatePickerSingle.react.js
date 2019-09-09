@@ -49,6 +49,7 @@ export default class DatePickerSingle extends Component {
         const {focused} = this.state;
 
         const {
+			available_dates,
             calendar_orientation,
             clearable,
             day_size,
@@ -76,6 +77,7 @@ export default class DatePickerSingle extends Component {
         ]);
 
         const verticalFlag = calendar_orientation !== 'vertical';
+		const isDayBlocked = day => available_dates.filter(d => moment(d).isSame(moment(day), "day")).length == 0;
 
         const DatePickerWrapperStyles = {
             position: 'relative',
@@ -101,6 +103,7 @@ export default class DatePickerSingle extends Component {
                         date || initial_visible_month || moment()
                     }
                     isOutsideRange={this.isOutsideRange}
+                	isDayBlocked={isDayBlocked}
                     numberOfMonths={number_of_months_shown}
                     withPortal={with_portal && verticalFlag}
                     withFullScreenPortal={
@@ -159,6 +162,13 @@ DatePickerSingle.propTypes = {
      *
      */
     initial_visible_month: PropTypes.string,
+
+
+    /**
+     * Specifies the date that should be blocked in the calendar
+     */
+    available_dates : PropTypes.array,
+
 
     /**
      * Size of rendered calendar days, higher number
@@ -303,4 +313,5 @@ DatePickerSingle.defaultProps = {
     reopen_calendar_on_clear: false,
     clearable: false,
     disabled: false,
+    available_dates: [], 
 };
